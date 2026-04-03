@@ -7342,7 +7342,7 @@ void ConnectorImpl::notifyLongPulse(bool statusConnected)
             return;
         }
 
-        if (existingDev && (existingDev->isPreviouslyFakedMuxDevice() || bIgnoreUnplugUnlessRequested) && !existingDev->isMarkedForDeletion())
+        if (existingDev && existingDev->isPreviouslyFakedMuxDevice() && !existingDev->isMarkedForDeletion())
         {
             DP_PRINTF(DP_NOTICE, "NotifyLongPulse ignored as there is a previously faked device but it is not marked for deletion");
             if (!statusConnected)
@@ -7352,6 +7352,12 @@ void ConnectorImpl::notifyLongPulse(bool statusConnected)
             }
             return;
         }
+
+		if (existingDev && bIgnoreUnplugUnlessRequested && !statusConnected && !existingDev->isMarkedForDeletion())
+		{
+			sink->notifyDetectComplete();
+			return;
+		}
     }
 
     if (previousPlugged && statusConnected)

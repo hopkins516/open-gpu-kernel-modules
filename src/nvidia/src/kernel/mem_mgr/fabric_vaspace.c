@@ -389,7 +389,7 @@ fabricvaspaceAllocNonContiguous_IMPL
 {
     NV_STATUS status    = NV_OK;
     NvU64     freeSize  = 0;
-    NvU32     pageCount = (size / pageSize);
+    NvU32     pageCount;
     NvU64     addr;
     NvU32     idx;
     NvBool    bDefaultAllocMode;
@@ -409,6 +409,8 @@ fabricvaspaceAllocNonContiguous_IMPL
     // Check the alignment and size are pageSize aligned.
     NV_ASSERT_OR_RETURN(NV_IS_ALIGNED64(align, pageSize), NV_ERR_INVALID_ARGUMENT);
     NV_ASSERT_OR_RETURN(NV_IS_ALIGNED64(size, pageSize),  NV_ERR_INVALID_ARGUMENT);
+
+    pageCount = (NvU32)(size / pageSize);
 
     // Check if heap can satisfy the request.
     NV_ASSERT_OK_OR_RETURN(fabricvaspaceGetFreeHeap(pFabricVAS, &freeSize));
